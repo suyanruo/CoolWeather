@@ -45,25 +45,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(List<Now> dataObject) {
                         Log.i(TAG, "onSuccess: " + new Gson().toJson(dataObject));
+                        Log.e(TAG, "thread: " + Thread.currentThread().getName());
                     }
                 });
-    }
-
-    private String getRequest() {
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .url(url3)
-                .build();
-
-        try {
-            Response response = client.newCall(request).execute();
-            if (response != null && response.body() != null) {
-                return response.body().string();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 }
