@@ -14,19 +14,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        HeWeather.getWeatherNow(this, "CN101010100", Lang.CHINESE_SIMPLIFIED, Unit.METRIC,
-//                new HeWeather.OnResultWeatherNowBeanListener() {
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        Log.i(TAG, "onError: ", e);
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(List<Now> dataObject) {
-//                        Log.i(TAG, "onSuccess: " + new Gson().toJson(dataObject));
-//                        Log.e(TAG, "thread: " + Thread.currentThread().getName());
-//                    }
-//                });
         FragmentUtil.setRootFragment(this, R.id.root_main, new ChooseAreaFragment());
     }
 

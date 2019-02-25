@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.zhangjian.coolweather.R;
 import com.zhangjian.coolweather.db.City;
 import com.zhangjian.coolweather.db.County;
@@ -29,6 +30,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import interfaces.heweather.com.interfacesmodule.bean.Lang;
+import interfaces.heweather.com.interfacesmodule.bean.Unit;
+import interfaces.heweather.com.interfacesmodule.bean.weather.now.Now;
+import interfaces.heweather.com.interfacesmodule.view.HeWeather;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -207,5 +212,23 @@ public class ChooseAreaFragment extends Fragment {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
+    }
+
+    private void getWeather() {
+        showDialog();
+        HeWeather.getWeatherNow(getActivity(), "CN101010100", Lang.CHINESE_SIMPLIFIED, Unit.METRIC,
+                new HeWeather.OnResultWeatherNowBeanListener() {
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.i(TAG, "onError: ", e);
+                    }
+
+                    @Override
+                    public void onSuccess(List<Now> dataObject) {
+                        closeDialog();
+                        Log.i(TAG, "onSuccess: " + new Gson().toJson(dataObject));
+                        Log.e(TAG, "thread: " + Thread.currentThread().getName());
+                    }
+                });
     }
 }
