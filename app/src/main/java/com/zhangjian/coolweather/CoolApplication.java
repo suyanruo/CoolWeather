@@ -23,4 +23,8 @@ public class CoolApplication extends Application {
         HeConfig.init(KEY_ID, KEY_CONTENT);
         HeConfig.switchToFreeServerNode();
     }
+
+    public static Context getContext() {
+        return sContext;
+    }
 }

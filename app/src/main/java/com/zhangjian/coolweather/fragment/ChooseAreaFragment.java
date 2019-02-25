@@ -1,6 +1,7 @@
 package com.zhangjian.coolweather.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,15 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.zhangjian.coolweather.R;
+import com.zhangjian.coolweather.activity.WeatherActivity;
 import com.zhangjian.coolweather.db.City;
 import com.zhangjian.coolweather.db.County;
 import com.zhangjian.coolweather.db.Province;
@@ -30,10 +30,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import interfaces.heweather.com.interfacesmodule.bean.Lang;
-import interfaces.heweather.com.interfacesmodule.bean.Unit;
-import interfaces.heweather.com.interfacesmodule.bean.weather.now.Now;
-import interfaces.heweather.com.interfacesmodule.view.HeWeather;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -80,6 +76,11 @@ public class ChooseAreaFragment extends Fragment {
             } else if (LEVEL_CITY == currentLevel) {
                 selectedCity = cityList.get(i);
                 queryCounties();
+            } else if (LEVEL_COUNTY == currentLevel) {
+                Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                intent.putExtra("weather_id", countyList.get(i).getWeatherId());
+                Log.d(TAG, "onActivityCreated: weather_id:" + countyList.get(i).getWeatherId());
+                startActivity(intent);
             }
         });
         backButton.setOnClickListener((view) -> {
@@ -212,23 +213,5 @@ public class ChooseAreaFragment extends Fragment {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
-    }
-
-    private void getWeather() {
-        showDialog();
-        HeWeather.getWeatherNow(getActivity(), "CN101010100", Lang.CHINESE_SIMPLIFIED, Unit.METRIC,
-                new HeWeather.OnResultWeatherNowBeanListener() {
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i(TAG, "onError: ", e);
-                    }
-
-                    @Override
-                    public void onSuccess(List<Now> dataObject) {
-                        closeDialog();
-                        Log.i(TAG, "onSuccess: " + new Gson().toJson(dataObject));
-                        Log.e(TAG, "thread: " + Thread.currentThread().getName());
-                    }
-                });
     }
 }
