@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zhangjian.coolweather.R;
+import com.zhangjian.coolweather.activity.MainActivity;
 import com.zhangjian.coolweather.activity.WeatherActivity;
 import com.zhangjian.coolweather.db.City;
 import com.zhangjian.coolweather.db.County;
@@ -77,10 +78,16 @@ public class ChooseAreaFragment extends Fragment {
                 selectedCity = cityList.get(i);
                 queryCounties();
             } else if (LEVEL_COUNTY == currentLevel) {
-                Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                intent.putExtra("weather_id", countyList.get(i).getWeatherId());
-                Log.d(TAG, "onActivityCreated: weather_id:" + countyList.get(i).getWeatherId());
-                startActivity(intent);
+                String weatherId = countyList.get(i).getWeatherId();
+                if (getActivity() instanceof MainActivity) {
+                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                    intent.putExtra("weather_id", weatherId);
+                    Log.d(TAG, "onActivityCreated: weather_id:" + countyList.get(i).getWeatherId());
+                    startActivity(intent);
+                } else if (getActivity() instanceof WeatherActivity) {
+                    WeatherActivity activity = (WeatherActivity) getActivity();
+                    activity.changeCity(weatherId);
+                }
             }
         });
         backButton.setOnClickListener((view) -> {

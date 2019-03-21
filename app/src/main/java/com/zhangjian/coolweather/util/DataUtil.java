@@ -2,6 +2,8 @@ package com.zhangjian.coolweather.util;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.zhangjian.coolweather.db.City;
 import com.zhangjian.coolweather.db.County;
 import com.zhangjian.coolweather.db.Province;
@@ -9,6 +11,8 @@ import com.zhangjian.coolweather.db.Province;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 
 public class DataUtil {
 
@@ -84,5 +88,32 @@ public class DataUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * 把指定的json字符串解析为指定的对象
+     *
+     * @param json
+     * @return
+     */
+    public static <T> T parse(String json, TypeToken<T> token) {
+        Type type = token.getType();
+        try {
+            json = json.trim();
+            return new Gson().fromJson(json, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 将对象转化为json字符串
+     *
+     * @param t
+     * @return
+     */
+    public static <T> String toJson(T t) {
+        return new Gson().toJson(t);
     }
 }
